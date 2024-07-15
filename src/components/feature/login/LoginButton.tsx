@@ -1,7 +1,10 @@
 'use client'
 
 import Keycloak from 'keycloak-js';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import logo from '@/assets/logo.svg';
+import silverMedal from '@/assets/silverMedal.svg';
 
 export default function LoginButton() {
   const [keycloak, setKeycloak] = useState<Keycloak | null>(null);
@@ -9,8 +12,7 @@ export default function LoginButton() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("Component mounted");
-
+    console.log('Initializing Keycloak...');
     const keycloakInstance = new Keycloak({
       url: 'https://test.udongrang.com:8443',
       realm: 'next_oauth_test',
@@ -18,28 +20,31 @@ export default function LoginButton() {
     });
 
     keycloakInstance.init({
-      onLoad: 'login-required',
-      checkLoginIframe: false,
+      onLoad: 'check-sso', // 변경: 자동 로그인을 막기 위해 'login-required'에서 'check-sso'로 변경
+      checkLoginIframe: true,
+      silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
       pkceMethod: 'S256'
     }).then(keycloakAuthenticated => {
-      console.log("Keycloak initialized, authenticated:", keycloakAuthenticated);
+      console.log('Keycloak initialized. Authenticated:', keycloakAuthenticated);
       setKeycloak(keycloakInstance);
       setAuthenticated(keycloakAuthenticated);
 
       if (keycloakAuthenticated) {
+        console.log('User is authenticated. Setting up token refresh...');
         // Set up token refresh
         setInterval(() => {
           keycloakInstance.updateToken(70).then((refreshed) => {
             if (refreshed) {
               console.log('Token refreshed');
             } else {
+              console.log('Token not refreshed');
               const tokenExp = keycloakInstance.tokenParsed?.exp;
               const timeSkew = keycloakInstance.timeSkew || 0;
               if (tokenExp) {
                 const remainingTime = Math.round(tokenExp + timeSkew - new Date().getTime() / 1000);
-                console.log(`Token not refreshed, valid for ${remainingTime} seconds`);
+                console.log('Token valid for remaining time (seconds):', remainingTime);
               } else {
-                console.log('Token not refreshed, but unable to calculate remaining time');
+                console.log('Token not refreshed, unable to calculate remaining time');
               }
             }
           }).catch(() => {
@@ -55,19 +60,32 @@ export default function LoginButton() {
   }, []);
 
   const handleLogin = () => {
-    console.log("Login button clicked");
     if (keycloak) {
+      console.log('Initiating login...');
       keycloak.login({ idpHint: 'google' });
+    } else {
+      console.log('Keycloak instance is null, cannot initiate login');
     }
   };
 
   const handleLogout = () => {
-    console.log("Logout button clicked");
     if (keycloak) {
-      setAuthenticated(false);
-      keycloak.logout();
+      console.log('Initiating logout...');
+      keycloak.logout().then(() => {
+        console.log('Logout successful. Updating state...');
+        setAuthenticated(false);
+        console.log('State updated. Authenticated:', false);
+      }).catch(error => {
+        console.error('Logout failed', error);
+      });
+    } else {
+      console.log('Keycloak instance is null, cannot initiate logout');
     }
   };
+
+  useEffect(() => {
+    console.log('Rendering component. Authenticated:', authenticated);
+  }, [authenticated]);
 
   if (loading) {
     return <div style={{ textAlign: 'center', marginTop: '30px' }}>Loading...</div>;
@@ -75,16 +93,39 @@ export default function LoginButton() {
 
   if (authenticated) {
     return (
-      <div style={{ textAlign: 'center', marginTop: '40px' }}>
-        <div>로그인됨</div>
-        <button onClick={handleLogout}>로그아웃</button>
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="relative flex flex-col items-center w-full min-h-screen bg-brand-primary-100">
+          <div className="bg-brand-primary-400 rounded-full absolute top-[-400px] w-[1000px] h-[1000px] flex flex-col items-center gap-16">
+            <div className="flex flex-col items-center mt-[530px]">
+              <Image src={silverMedal} width={70} height={70} alt="silverMedal icon" />
+              <Image src={logo} width={300} height={300} alt="matchmate logo" />
+            </div>
+            <div className="text-center mt-4">
+              <div>로그인됨</div>
+              <button onClick={handleLogout} className="bg-red-500 text-white p-2 rounded">로그아웃</button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '20px' }}>
-      <button onClick={handleLogin}>Google로 로그인하기</button>
+    <div className="w-full h-screen flex items-center justify-center">
+      <div className="relative flex flex-col items-center w-full min-h-screen bg-brand-primary-100">
+        <div className="bg-brand-primary-400 rounded-full absolute top-[-400px] w-[1000px] h-[1000px] flex flex-col items-center gap-16">
+          <div className="flex flex-col items-center mt-[530px]">
+            <Image src={silverMedal} width={70} height={70} alt="silverMedal icon" />
+            <Image src={logo} width={300} height={300} alt="matchmate logo" />
+          </div>
+          <div className="text-center mt-4">
+            <button onClick={handleLogin} className="bg-yellow-400 text-black p-2 rounded-full flex items-center gap-2">
+              <Image src="/kakao.svg" width={20} height={20} alt="kakao icon" />
+              카카오 회원가입
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

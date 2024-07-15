@@ -4,7 +4,7 @@ const LoginButton = dynamic(() => import('../../components/feature/login/LoginBu
 
 export default function LoginPage() {
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+    <div>
       <h1>로그인 페이지</h1>
       <LoginButton />
     </div>
