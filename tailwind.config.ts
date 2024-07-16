@@ -35,16 +35,17 @@ const config = {
           black: '#000',
         },
         'brand-primary': {
-
+          100: '#F5F5FF',
+          200: '#D0D0DF',
+          300: '#71739E',
+          400: '#41447E',
+          500: '#12155E',
         },
+        'brand-secondary': '#FE9999',
+
         'brand-error': 'DA3A44',
         'brand-success': '1D62EC',
         'brand-warning': 'F3CB3C',
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
         "accordion-down": {
