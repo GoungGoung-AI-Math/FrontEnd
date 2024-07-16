@@ -44,6 +44,7 @@ export default function Home() {
       <Button variant={'primary'} className=" w-20">버튼!</Button>
       <Button variant={'outline'} className=" w-20">버튼!</Button>
       <Button variant={'secondary'} className=" w-20">버튼!</Button>
+      <Button variant={'secondary'} className=" w-20">버튼!</Button>
 
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
         <a

@@ -13,7 +13,7 @@ const buttonVariants = cva(
         primary: 'bg-brand-primary-500 hover:bg-brand-primary-400 text-center text-white rounded-md',
         outline:
           'border border-brand-primary-400 bg-white hover:bg-brand-primary-100 text-center text-brand-primary-500 ',
-        secondary: 'border bg-brand-secondary bg-white hover:bg-gray-50',
+        secondary: 'bg-brand-secondary text-center text-white',
         disable: 'bg-grayscale-200 text-center text-white',
         ghost: 'border border-grayscale-100 bg-white text-center text-grayscale-200',
         kakao: 'text-grayscale-900 bg-[#FBD821] text-button-md hover:bg-[#FBD821]/80 hover:text-gray-700',
