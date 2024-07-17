@@ -2,24 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 커스텀 스타일 */
-.bg-brand-primary-100 {
-  background-color: #f0f4f8;
+:root {
+  --foreground-rgb: 0, 0, 0;
+  /* --background-start-rgb: 234, 248, 244;
+  --background-end-rgb: 176, 227, 212; */
+  height: 100%;
 }
 
-.bg-brand-primary-400 {
-  background-color: #70c1b3;
+body {
+  color: rgb(var(--foreground-rgb));
+  background: white;
 }
 
-.min-h-screen {
-  min-height: 100vh;
-}
-
-button {
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #005bb5;
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+  }
 }
