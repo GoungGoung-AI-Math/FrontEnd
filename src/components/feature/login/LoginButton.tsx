@@ -3,6 +3,7 @@
 import Cookies from 'js-cookie';
 import Keycloak from 'keycloak-js';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import appleLogo from '@/assets/apple.svg';
@@ -14,6 +15,7 @@ export default function LoginButton() {
   const [keycloak, setKeycloak] = useState<Keycloak | null>(null);
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const router = useRouter(); // useRouter 훅 사용
 
   useEffect(() => {
     const keycloakInstance = new Keycloak({
@@ -60,6 +62,9 @@ export default function LoginButton() {
 
           // 유저 등록
           registerUser();
+
+          // 로그인 성공 시 리다이렉션
+          router.push('/login/add-info');
         }
         setLoading(false);
       })
@@ -67,7 +72,7 @@ export default function LoginButton() {
         console.error('Keycloak initialization failed', error);
         setLoading(false);
       });
-  }, []);
+  }, [router]);
 
   const handleLogin = (idpHint: string) => {
     if (keycloak) {
@@ -111,7 +116,7 @@ export default function LoginButton() {
   };
 
   if (loading) {
-    return <div style={{ textAlign: 'center', marginTop: '30px' }}>Loading...</div>;
+    return <div style={{ textAlign: 'center', marginTop: '30px' }}>로딩 중...</div>;
   }
 
   if (authenticated) {
