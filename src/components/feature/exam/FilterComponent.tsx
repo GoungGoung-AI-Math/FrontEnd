@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react';
-
 import { Checkbox } from '@/components/ui/checkbox';
 
 const years = [2021, 2022, 2023];
@@ -27,66 +26,72 @@ function FilterComponent() {
   };
 
   return (
-    <div className="flex flex-col items-end gap-6 p-0 w-[721px] h-[262px] relative">
-      <div className="flex flex-row items-end gap-9 w-full h-[70px]">
-        <div className="flex flex-col w-[240px] h-[70px]">
-          <label className="font-bold text-lg text-[#1E1E1E]">연도</label>
-          <select
-            value={selectedStartYear}
-            onChange={(e) => setSelectedStartYear(Number(e.target.value))}
-            className="mt-1 w-full h-[40px] p-2 text-lg border border-[#D9D9D9] rounded-lg"
-          >
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
+    <div className="relative w-[1440px] h-[459px]">
+      <div className="absolute w-full h-full bg-[#DCE5F3]"></div>
+      <div className="absolute flex flex-col items-end gap-6 p-0 w-[721px] h-[262px] left-[57px] top-[34px]">
+        <div className="flex flex-row items-end gap-9 w-full h-[70px]">
+          <div className="flex flex-col w-[240px] h-[70px]">
+            <label className="font-bold text-lg text-[#1E1E1E]">연도</label>
+            <select
+              value={selectedStartYear}
+              onChange={(e) => setSelectedStartYear(Number(e.target.value))}
+              className="mt-1 w-full h-[40px] p-2 text-lg border border-[#D9D9D9] rounded-lg"
+            >
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col w-[240px] h-[70px]">
+            <label className="font-bold text-lg text-[#1E1E1E]">연도</label>
+            <select
+              value={selectedEndYear}
+              onChange={(e) => setSelectedEndYear(Number(e.target.value))}
+              className="mt-1 w-full h-[40px] p-2 text-lg border border-[#D9D9D9] rounded-lg"
+            >
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="flex flex-col w-[240px] h-[70px]">
-          <label className="font-bold text-lg text-[#1E1E1E]">연도</label>
-          <select
-            value={selectedEndYear}
-            onChange={(e) => setSelectedEndYear(Number(e.target.value))}
-            className="mt-1 w-full h-[40px] p-2 text-lg border border-[#D9D9D9] rounded-lg"
-          >
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
+        <div className="flex flex-col w-full">
+          <label className="font-bold text-lg text-[#1E1E1E]">시험</label>
+          <div className="flex flex-wrap gap-4 mt-2">
+            {months.map((month) => (
+              <label key={month} className="flex items-center gap-2">
+                <Checkbox
+                  className="h-5 w-5 border border-[#D9D9D9] bg-white"
+                  checked={selectedMonths.includes(month)}
+                  onChange={() => toggleSelection(month, setSelectedMonths, selectedMonths)}
+                />
+                <span className="font-normal text-lg text-[#1E1E1E]">{month}</span>
+              </label>
             ))}
-          </select>
+          </div>
+        </div>
+        <div className="flex flex-col w-full">
+          <label className="font-bold text-lg text-[#1E1E1E]">영역</label>
+          <div className="flex flex-wrap gap-4 mt-2">
+            {subjects.map((subject) => (
+              <label key={subject} className="flex items-center gap-2">
+                <Checkbox
+                  className="h-5 w-5 border border-[#D9D9D9] bg-white"
+                  checked={selectedSubjects.includes(subject)}
+                  onChange={() => toggleSelection(subject, setSelectedSubjects, selectedSubjects)}
+                />
+                <span className="font-normal text-lg text-[#1E1E1E]">{subject}</span>
+              </label>
+            ))}
+          </div>
         </div>
       </div>
-      <div className="flex flex-col w-full">
-        <label className="font-bold text-lg text-[#1E1E1E]">시험</label>
-        <div className="flex flex-wrap gap-4 mt-2">
-          {months.map((month) => (
-            <label key={month} className="flex items-center gap-2">
-              <Checkbox
-                className="h-5 w-5 border border-[#D9D9D9] bg-white"
-                checked={selectedMonths.includes(month)}
-                onChange={() => toggleSelection(month, setSelectedMonths, selectedMonths)}
-              />
-              <span className="font-normal text-lg text-[#1E1E1E]">{month}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-col w-full">
-        <label className="font-bold text-lg text-[#1E1E1E]">영역</label>
-        <div className="flex flex-wrap gap-4 mt-2">
-          {subjects.map((subject) => (
-            <label key={subject} className="flex items-center gap-2">
-              <Checkbox
-                className="h-5 w-5 border border-[#D9D9D9] bg-white"
-                checked={selectedSubjects.includes(subject)}
-                onChange={() => toggleSelection(subject, setSelectedSubjects, selectedSubjects)}
-              />
-              <span className="font-normal text-lg text-[#1E1E1E]">{subject}</span>
-            </label>
-          ))}
-        </div>
+      <div className="absolute w-[54px] h-[40px] left-[1349px] top-[391px] bg-[#8DB2EA] border border-[#2C2C2C] rounded-lg flex items-center justify-center">
+        <span className="font-normal text-lg text-[#F5F5F5]">확인</span>
       </div>
     </div>
   );
