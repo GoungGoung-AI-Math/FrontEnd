@@ -27,7 +27,7 @@ function FilterComponent() {
 
   return (
     <div className="relative w-[1440px] h-[459px]">
-      <div className="absolute w-full h-full bg-[#DCE5F3]"></div>
+      <div className="absolute w-full h-full "></div>
       <div className="absolute flex flex-col items-end gap-6 p-0 w-[721px] h-[262px] left-[57px] top-[34px]">
         <div className="flex flex-row items-end gap-9 w-full h-[70px]">
           <div className="flex flex-col w-[240px] h-[70px]">
