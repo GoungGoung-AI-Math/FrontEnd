@@ -57,6 +57,9 @@ export default function LoginButton() {
           if (keycloakInstance.refreshToken) {
             Cookies.set('refresh_token', keycloakInstance.refreshToken, { expires: 7 }); // 7일 후 만료
           }
+
+          // 유저 등록
+          registerUser();
         }
         setLoading(false);
       })
@@ -81,6 +84,29 @@ export default function LoginButton() {
       }).catch((error) => {
         console.error('Logout failed', error);
       });
+    }
+  };
+
+  const registerUser = () => {
+    const token = Cookies.get('access_token');
+    console.log(token);
+    if (token) {
+      fetch('http://localhost:8080/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('User registered:', data);
+        })
+        .catch((error) => {
+          console.error('Error registering user:', error);
+        });
+    } else {
+      console.error('No access token found');
     }
   };
 
