@@ -1,10 +1,14 @@
-'use client'
+'use client';
 
+import Cookies from 'js-cookie';
 import Keycloak from 'keycloak-js';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import logo from '@/assets/logo.svg';
-import silverMedal from '@/assets/silverMedal.svg';
+
+import appleLogo from '@/assets/apple.svg';
+import facebookLogo from '@/assets/facebook.svg';
+import googleLogo from '@/assets/google.svg';
+import { Button } from '@/components/ui/button';
 
 export default function LoginButton() {
   const [keycloak, setKeycloak] = useState<Keycloak | null>(null);
@@ -12,80 +16,73 @@ export default function LoginButton() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('Initializing Keycloak...');
     const keycloakInstance = new Keycloak({
       url: 'https://test.udongrang.com:8443',
       realm: 'next_oauth_test',
-      clientId: 'google'
+      clientId: 'google',
     });
 
-    keycloakInstance.init({
-      onLoad: 'check-sso', // 변경: 자동 로그인을 막기 위해 'login-required'에서 'check-sso'로 변경
-      checkLoginIframe: true,
-      silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-      pkceMethod: 'S256'
-    }).then(keycloakAuthenticated => {
-      console.log('Keycloak initialized. Authenticated:', keycloakAuthenticated);
-      setKeycloak(keycloakInstance);
-      setAuthenticated(keycloakAuthenticated);
+    keycloakInstance
+      .init({
+        onLoad: 'check-sso',
+        checkLoginIframe: true,
+        silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+        pkceMethod: 'S256',
+      })
+      .then((keycloakAuthenticated) => {
+        setKeycloak(keycloakInstance);
+        setAuthenticated(keycloakAuthenticated);
 
-      if (keycloakAuthenticated) {
-        console.log('User is authenticated. Setting up token refresh...');
-        // Set up token refresh
-        setInterval(() => {
-          keycloakInstance.updateToken(70).then((refreshed) => {
-            if (refreshed) {
-              console.log('Token refreshed');
-            } else {
-              console.log('Token not refreshed');
-              const tokenExp = keycloakInstance.tokenParsed?.exp;
-              const timeSkew = keycloakInstance.timeSkew || 0;
-              if (tokenExp) {
-                const remainingTime = Math.round(tokenExp + timeSkew - new Date().getTime() / 1000);
-                console.log('Token valid for remaining time (seconds):', remainingTime);
-              } else {
-                console.log('Token not refreshed, unable to calculate remaining time');
+        if (keycloakAuthenticated) {
+          // Set up token refresh
+          setInterval(() => {
+            keycloakInstance.updateToken(70).then((refreshed) => {
+              if (refreshed) {
+                if (keycloakInstance.token) {
+                  Cookies.set('access_token', keycloakInstance.token, { expires: 1 }); // 1일 후 만료
+                }
+                if (keycloakInstance.refreshToken) {
+                  Cookies.set('refresh_token', keycloakInstance.refreshToken, { expires: 7 }); // 7일 후 만료
+                }
               }
-            }
-          }).catch(() => {
-            console.error('Failed to refresh token');
-          });
-        }, 60000);
-      }
-      setLoading(false);
-    }).catch(error => {
-      console.error('Keycloak initialization failed', error);
-      setLoading(false);
-    });
+            }).catch(() => {
+              console.error('Failed to refresh token');
+            });
+          }, 60000);
+
+          // 초기 토큰을 쿠키에 저장
+          if (keycloakInstance.token) {
+            Cookies.set('access_token', keycloakInstance.token, { expires: 1 }); // 1일 후 만료
+          }
+          if (keycloakInstance.refreshToken) {
+            Cookies.set('refresh_token', keycloakInstance.refreshToken, { expires: 7 }); // 7일 후 만료
+          }
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Keycloak initialization failed', error);
+        setLoading(false);
+      });
   }, []);
 
-  const handleLogin = () => {
+  const handleLogin = (idpHint: string) => {
     if (keycloak) {
-      console.log('Initiating login...');
-      keycloak.login({ idpHint: 'google' });
-    } else {
-      console.log('Keycloak instance is null, cannot initiate login');
+      keycloak.login({ idpHint });
     }
   };
 
   const handleLogout = () => {
     if (keycloak) {
-      console.log('Initiating logout...');
       keycloak.logout().then(() => {
-        console.log('Logout successful. Updating state...');
         setAuthenticated(false);
-        console.log('State updated. Authenticated:', false);
-      }).catch(error => {
+        Cookies.remove('access_token');
+        Cookies.remove('refresh_token');
+      }).catch((error) => {
         console.error('Logout failed', error);
       });
-    } else {
-      console.log('Keycloak instance is null, cannot initiate logout');
     }
   };
-
-  useEffect(() => {
-    console.log('Rendering component. Authenticated:', authenticated);
-  }, [authenticated]);
 
   if (loading) {
     return <div style={{ textAlign: 'center', marginTop: '30px' }}>Loading...</div>;
@@ -93,38 +90,43 @@ export default function LoginButton() {
 
   if (authenticated) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
-        <div className="relative flex flex-col items-center w-full min-h-screen bg-brand-primary-100">
-          <div className="bg-brand-primary-400 rounded-full absolute top-[-400px] w-[1000px] h-[1000px] flex flex-col items-center gap-16">
-            <div className="flex flex-col items-center mt-[530px]">
-              <Image src={silverMedal} width={70} height={70} alt="silverMedal icon" />
-              <Image src={logo} width={300} height={300} alt="matchmate logo" />
-            </div>
-            <div className="text-center mt-4">
-              <div>로그인됨</div>
-              <button onClick={handleLogout} className="bg-red-500 text-white p-2 rounded">로그아웃</button>
-            </div>
-          </div>
-        </div>
+      <div className="text-center mt-4">
+        <div>로그인됨</div>
+        <Button variant="outline" className="w-20" onClick={handleLogout}>로그아웃</Button>
       </div>
     );
   }
 
   return (
-    <div className="w-full h-screen flex items-center justify-center">
-      <div className="relative flex flex-col items-center w-full min-h-screen bg-brand-primary-100">
-        <div className="bg-brand-primary-400 rounded-full absolute top-[-400px] w-[1000px] h-[1000px] flex flex-col items-center gap-16">
-          <div className="flex flex-col items-center mt-[530px]">
-            <Image src={silverMedal} width={70} height={70} alt="silverMedal icon" />
-            <Image src={logo} width={300} height={300} alt="matchmate logo" />
-          </div>
-          <div className="text-center mt-4">
-            <button onClick={handleLogin} className="bg-yellow-400 text-black p-2 rounded-full flex items-center gap-2">
-              <Image src="/kakao.svg" width={20} height={20} alt="kakao icon" />
-              카카오 회원가입
-            </button>
-          </div>
+    <div>
+      <Button variant="outline" className="w-full mb-2 flex items-center gap-2" onClick={() => handleLogin('google')}>
+        <Image src={googleLogo} width={20} height={20} alt="Google logo" />
+        Google로 로그인
+      </Button>
+      <Button variant="outline" className="w-full mb-2 flex items-center gap-2" onClick={() => handleLogin('facebook')}>
+        <Image src={facebookLogo} width={20} height={20} alt="Facebook logo" />
+        Facebook으로 로그인
+      </Button>
+      <Button variant="outline" className="w-full flex items-center gap-2" onClick={() => handleLogin('apple')}>
+        <Image src={appleLogo} width={20} height={20} alt="Apple logo" />
+        Apple로 로그인
+      </Button>
+      <form>
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700">이메일 또는 사용자 이름 *</label>
+          <input id="email" type="email" required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
         </div>
+        <div className="mb-4">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700">비밀번호 *</label>
+          <input id="password" type="password" required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+        </div>
+        <div className="mb-4 text-right">
+          <a href="#" className="text-sm text-blue-500">비밀번호를 잊어버리셨나요?</a>
+        </div>
+        <Button type="submit" className="w-full">로그인</Button>
+      </form>
+      <div className="mt-4 text-sm">
+        <p>계정이 필요하세요? <a href="#" className="text-blue-500 underline">계정을 만드세요</a></p>
       </div>
     </div>
   );
