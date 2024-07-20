@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react';
-
 import { Checkbox } from '@/components/ui/checkbox';
 
 const years = [2021, 2022, 2023];
@@ -24,6 +23,17 @@ function FilterComponent() {
         setSelected([...selectedItems, item]);
       }
     }
+  };
+
+  const handleButtonClick = () => {
+    const filters = {
+      startYear: selectedStartYear,
+      endYear: selectedEndYear,
+      months: selectedMonths,
+      subjects: selectedSubjects,
+    };
+    console.log('Selected Filters:', filters);
+    // Add your logic to handle the filters here, e.g., fetch filtered data
   };
 
   return (
@@ -91,7 +101,10 @@ function FilterComponent() {
           </div>
         </div>
       </div>
-      <div className="absolute w-[54px] h-[40px] left-[1349px] top-[391px] bg-[#8DB2EA] border border-[#2C2C2C] rounded-lg flex items-center justify-center">
+      <div
+        className="absolute w-[54px] h-[40px] left-[1349px] top-[391px] bg-[#8DB2EA] border border-[#2C2C2C] rounded-lg flex items-center justify-center cursor-pointer"
+        onClick={handleButtonClick}
+      >
         <span className="font-normal text-lg text-[#F5F5F5]">확인</span>
       </div>
     </div>
