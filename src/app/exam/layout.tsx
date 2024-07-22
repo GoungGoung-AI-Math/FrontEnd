@@ -1,12 +1,32 @@
-'use client';
+'use client'
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-export default function ExamLayout({ children }: { children: React.ReactNode }) {
+interface ExamLayoutProps {
+  children: ReactNode;
+}
+
+export default function ExamLayout({ children }: ExamLayoutProps): JSX.Element {
+  const childrenArray = React.Children.toArray(children);
+  console.log('ExamLayout - Children:', childrenArray);
+
+  const header = childrenArray[0] ? childrenArray[0] : <div>기본 헤더</div>;
+  const main = childrenArray.length > 1 ? childrenArray.slice(1) : [];
+  console.log('ExamLayout - Header:', header);
+  console.log('ExamLayout - Main:', main);
+
   return (
-    <div className="relative w-full h-full flex justify-center items-start pt-[80px]">
-      <div className="w-[1440px] h-[459px] bg-blue-100 flex items-center justify-center">
-        {children}
+    <div className="relative w-full h-full flex flex-col items-start pt-[80px]">
+      <div className="w-full max-w-[1440px] h-[459px] bg-blue-100 flex items-center justify-center">
+        {header}
+      </div>
+      <div
+        className="w-full max-w-[1440px] h-[535px] bg-white flex flex-col items-center justify-start overflow-visible">
+        {main.map((child, index) => (
+          <div key={index} className="w-full z-1000">
+            {child}
+          </div>
+        ))}
       </div>
     </div>
   );
