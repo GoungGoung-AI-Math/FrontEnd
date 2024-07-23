@@ -1,6 +1,8 @@
 'use client'
 
+import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
+
 
 const TOTAL_ITEMS = 10;  // 총 데이터 개수를 10개로 설정
 
@@ -9,8 +11,14 @@ function ProblemCard() {
     <div className="flex flex-col w-full p-4 gap-4">
       <div className="bg-white p-6 rounded-lg shadow-md w-full" style={{ maxWidth: '1440px' }}>
         <div className="flex flex-row items-center justify-between">
-          <div className="w-40 h-40 bg-gray-300 flex justify-center items-center mr-4">
-            <span className="text-2xl">이미지</span>
+          <div className="w-40 h-40 flex justify-center items-center mr-4">
+            <Image
+              src="/assets/image.png"
+              alt="이미지"
+              width={160}
+              height={160}
+              className="object-cover"
+            />
           </div>
           <div className="flex-grow">
             <h2 className="text-xl font-bold">2024 수능 수학 미적분</h2>
