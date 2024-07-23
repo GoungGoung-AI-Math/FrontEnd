@@ -2,13 +2,12 @@
 
 import Cookies from 'js-cookie';
 import Keycloak from 'keycloak-js';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import appleLogo from '@/assets/apple.svg';
-import facebookLogo from '@/assets/facebook.svg';
-import googleLogo from '@/assets/google.svg';
+import AppleLogo from '@/assets/apple.svg';
+import FacebookLogo from '@/assets/facebook.svg';
+import GoogleLogo from '@/assets/google.svg';
 import { Button } from '@/components/ui/button';
 
 export default function LoginButton() {
@@ -131,15 +130,15 @@ export default function LoginButton() {
   return (
     <div>
       <Button variant="outline" className="w-full mb-2 flex items-center gap-2" onClick={() => handleLogin('google')}>
-        <Image src={googleLogo} width={20} height={20} alt="Google logo" />
+        <GoogleLogo className="inline w-7 h-7" />
         Google로 로그인
       </Button>
       <Button variant="outline" className="w-full mb-2 flex items-center gap-2" onClick={() => handleLogin('facebook')}>
-        <Image src={facebookLogo} width={20} height={20} alt="Facebook logo" />
+        <FacebookLogo className="inline" />
         Facebook으로 로그인
       </Button>
       <Button variant="outline" className="w-full flex items-center gap-2" onClick={() => handleLogin('apple')}>
-        <Image src={appleLogo} width={20} height={20} alt="Apple logo" />
+        <AppleLogo className="inline" />
         Apple로 로그인
       </Button>
       <form>

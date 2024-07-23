@@ -17,13 +17,13 @@ export default function ExamLayout({ children }: ExamLayoutProps): JSX.Element {
 
   return (
     <div className="relative w-full h-full flex flex-col items-start pt-[80px]">
-      <div className="w-full max-w-[1440px] h-[459px] bg-blue-100 flex items-center justify-center">
+      <div className=" bg-blue-100 flex items-center justify-center">
         {header}
       </div>
       <div
-        className="w-full max-w-[1440px] h-[535px] bg-white flex flex-col items-center justify-start overflow-visible">
+        className="w-full bg-white flex flex-col items-center justify-start overflow-visible">
         {main.map((child, index) => (
-          <div key={index} className="w-full z-1000">
+          <div key={index} className="w-full z-10">
             {child}
           </div>
         ))}
