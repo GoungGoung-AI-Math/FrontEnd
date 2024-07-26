@@ -12,8 +12,17 @@ interface Filters {
   types: string[];
 }
 
+interface Problem {
+  examName: string;
+  createDate: string;
+  difficulty: string;
+  type: string;
+  revisionState: string;
+  totalSolveCount: number;
+}
+
 export default function ExamPage(): JSX.Element {
-  const [problems, setProblems] = useState([]);
+  const [problems, setProblems] = useState<Problem[]>([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [filters, setFilters] = useState<Filters>({ startYear: 2021, endYear: 2023, months: [], types: [] });
@@ -36,7 +45,7 @@ export default function ExamPage(): JSX.Element {
 
       if (response.ok) {
         const data = await response.json();
-        setProblems((prevProblems) => page === 0 ? data.content : [...prevProblems, ...data.content]);
+        setProblems((prevProblems) => (page === 0 ? data.content : [...prevProblems, ...data.content]));
         setPage(data.pageable.pageNumber + 1);
         setHasMore(!data.last);
       } else {
@@ -57,8 +66,7 @@ export default function ExamPage(): JSX.Element {
           <ProblemCardList problems={problems} fetchMore={() => fetchProblems(filters, page)} hasMore={hasMore} />
         ) : (
           <div className="text-center text-gray-500">
-            <p>옵션을 선택해서 문제를 찾아보세요~
-              허전한가? 뭔 이미지 더 넣어야하나? 흠..</p>
+            <p>옵션을 선택해서 문제를 찾아보세요~ 허전한가? 뭔 이미지 더 넣어야하나? 흠..</p>
           </div>
         )}
       </div>

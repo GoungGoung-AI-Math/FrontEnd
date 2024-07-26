@@ -1,14 +1,17 @@
+'use client'
+
 import React, { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
+
+import Label from '../../common/Label';
 
 const years = [2021, 2022, 2023];
 const months = ['전체', '03', '04', '06', '07', '09', '10', '11'];
 const types = ['전체', 'a', 'b', 'c'];
 
 interface FilterComponentProps {
-  onFilterChange: (filters: { startYear: number, endYear: number, months: string[], types: string[] }) => void;
+  onFilterChange: (filters: { startYear: number; endYear: number; months: string[]; types: string[] }) => void;
 }
 
 function FilterComponent({ onFilterChange }: FilterComponentProps) {
@@ -17,12 +20,16 @@ function FilterComponent({ onFilterChange }: FilterComponentProps) {
   const [selectedMonths, setSelectedMonths] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
-  const toggleSelection = (item: string, setSelected: React.Dispatch<React.SetStateAction<string[]>>, selectedItems: string[]) => {
+  const toggleSelection = (
+    item: string,
+    setSelected: React.Dispatch<React.SetStateAction<string[]>>,
+    selectedItems: string[]
+  ) => {
     if (item === '전체') {
       setSelected(selectedItems.length === months.length ? [] : months);
     } else {
       if (selectedItems.includes(item)) {
-        setSelected(selectedItems.filter(i => i !== item));
+        setSelected(selectedItems.filter((i) => i !== item));
       } else {
         setSelected([...selectedItems, item]);
       }
@@ -76,20 +83,7 @@ function FilterComponent({ onFilterChange }: FilterComponentProps) {
           <label className="font-bold text-[14px] text-[#1E1E1E]">시험</label>
           <div className="flex flex-wrap gap-4 mt-2">
             {months.map((month) => (
-              <label key={month} className="flex items-center gap-2">
-                <Checkbox
-                  id={`month-${month}`}
-                  className="h-5 w-6 border border-[#D9D9D9] bg-white"
-                  checked={selectedMonths.includes(month)}
-                  onCheckedChange={() => toggleSelection(month, setSelectedMonths, selectedMonths)}
-                />
-                <label
-                  htmlFor={`month-${month}`}
-                  className={`font-normal text-[14px] ${selectedMonths.includes(month) ? 'text-blue-500' : 'text-[#1E1E1E]'}`}
-                >
-                  {month}
-                </label>
-              </label>
+              <Label key={month} name={month} selectedValues={selectedMonths} toggleSelection={toggleSelection} setSelected={setSelectedMonths} />
             ))}
           </div>
         </div>
@@ -97,27 +91,15 @@ function FilterComponent({ onFilterChange }: FilterComponentProps) {
           <label className="font-bold text-[14px] text-[#1E1E1E]">영역</label>
           <div className="flex flex-wrap gap-4 mt-2">
             {types.map((type) => (
-              <label key={type} className="flex items-center gap-2">
-                <Checkbox
-                  id={`type-${type}`}
-                  className="h-5 w-6 border border-[#D9D9D9] bg-white"
-                  checked={selectedTypes.includes(type)}
-                  onCheckedChange={() => toggleSelection(type, setSelectedTypes, selectedTypes)}
-                />
-                <label
-                  htmlFor={`type-${type}`}
-                  className={`font-normal text-[14px] ${selectedTypes.includes(type) ? 'text-blue-500' : 'text-[#1E1E1E]'}`}
-                >
-                  {type}
-                </label>
-              </label>
+              <Label key={type} name={type} selectedValues={selectedTypes} toggleSelection={toggleSelection} setSelected={setSelectedTypes} />
             ))}
           </div>
         </div>
         <div className="flex justify-end">
-          <Button variant="primary"
-                  className="w-[54px] h-[40px] rounded-lg flex items-center justify-center cursor-pointer"
-                  onClick={handleButtonClick}
+          <Button
+            variant="primary"
+            className="w-[54px] h-[40px] rounded-lg flex items-center justify-center cursor-pointer"
+            onClick={handleButtonClick}
           >
             확인
           </Button>
