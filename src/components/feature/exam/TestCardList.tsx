@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 
-import ProblemCard from '../../common/ProblemCard';
+import TestCard from '../../common/TestCard';
 
 interface Problem {
   examName: string;
@@ -50,7 +50,7 @@ function ProblemCardList({ problems, fetchMore, hasMore }: ProblemCardListProps)
   return (
     <div className="w-full flex flex-col items-center">
       {problems.map((problem, index) => (
-        <ProblemCard key={index} problem={problem} />
+        <TestCard key={index} problem={problem} />
       ))}
       {hasMore && <div ref={loadMoreRef} className="h-10" />}
     </div>
