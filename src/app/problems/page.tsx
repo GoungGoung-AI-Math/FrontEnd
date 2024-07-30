@@ -19,7 +19,7 @@ export default function ProblemsPage() {
 
   useEffect(() => {
     const fetchProblems = async () => {
-      const response = await fetch('http://localhost:8080/problem/get-problem-list/1');
+      const response = await fetch('https://test.udongrang.com:7070/problem/get-problem-list/1');
       const data = await response.json();
       setProblems(data);
     };
