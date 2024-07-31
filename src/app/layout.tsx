@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <div className=" z-20 bg-white w-[80%] fixed">
             <NavBar />
           </div>
-          <div className="w-full mt-20 border">{children}</div>
+          <div className="w-full mt-20 ">{children}</div>
         </div>
       </body>
     </html>

@@ -59,7 +59,7 @@ export default function ExamPage(): JSX.Element {
 
   return (
     <div className=" flex flex-col items-center pt-2 ">
-      <div className="w-full p-4 border-b border-brand-primary-100 bg-brand-primary-100 rounded-lg text-brand-primary-500">
+      <div className="w-full p-4 border-b border-brand-primary-200 bg-brand-primary-100 rounded-lg text-brand-primary-500">
         <FilterComponent onFilterChange={(newFilters) => fetchProblems(newFilters, 0)} />
       </div>
       <div className="w-full bg-white p-2 mt-4 border-b-4 border-brand-primary-100">
