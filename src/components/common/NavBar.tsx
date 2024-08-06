@@ -3,17 +3,18 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 
 import Math from '@/assets/math_1411684.svg'
+import Math2 from '@/assets/noun-math-6757624.svg'
 
 import { Button } from '../ui/button'
 
 export default function NavBar() {
   return (
-    <div className="border-b-2 top-0 bg-white flex h-20 justify-between items-center border-brand-primary-100 px-4">
+    <div className="border-b-2 shado top-0 bg-white flex h-20 justify-between items-center border-brand-primary-100 px-4">
       <div className="flex items-center text-brand-primary-500 text-base ">
-        <div className="pr-10">
-          <Math width="45" height="45" />
+        <div className="pr-2">
+          <Math2 width="50" color="#12155e" className="pt-3" />
         </div>
-        <Link className="px-4 py-1 rounded-md hover:bg-brand-primary-100" href={'/'}>
+        <Link className="px-4 py-1 rounded-md hover:bg-brand-primary-100 " href={'/'}>
           홈
         </Link>
         <Link className="px-4 py-1 rounded-md hover:bg-brand-primary-100" href={'/exam'}>
