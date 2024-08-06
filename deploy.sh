@@ -4,13 +4,13 @@
 DOCKERHUB_USERNAME="kurigohan73"
 IMAGE_NAME="nextjs-app"
 EC2_USER="ec2-user"
-EC2_HOST="13.209.22.119"
+EC2_HOST="52.79.234.172"
 EC2_KEY_PATH=~/Desktop/aikey.pem
-SSL_CERT_PATH=/Users/makisekurisu
+SSL_CERT_PATH=~/Desktop
 
 # Docker 이미지 빌드
 echo "Docker 이미지 빌드 중..."
-docker build --no-cache -t $DOCKERHUB_USERNAME/$IMAGE_NAME .
+docker build --platform linux/amd64 -t $DOCKERHUB_USERNAME/$IMAGE_NAME:latest .
 
 # Docker 이미지 빌드 성공 여부 확인
 if [ $? -ne 0 ]; then
@@ -49,9 +49,9 @@ scp -i $EC2_KEY_PATH -o StrictHostKeyChecking=no $SSL_CERT_PATH/privkey.pem $EC2
 
 ssh -i $EC2_KEY_PATH $EC2_USER@$EC2_HOST <<EOF
     # SSL 인증서 디렉토리 생성 및 파일 이동
-    sudo mkdir -p /etc/letsencrypt/live/test.udongrang.com
-    sudo mv /tmp/fullchain.pem /etc/letsencrypt/live/test.udongrang.com/
-    sudo mv /tmp/privkey.pem /etc/letsencrypt/live/test.udongrang.com/
+    sudo mkdir -p /etc/letsencrypt/live/www.udongrang.com
+    sudo mv /tmp/fullchain.pem /etc/letsencrypt/live/www.udongrang.com/
+    sudo mv /tmp/privkey.pem /etc/letsencrypt/live/www.udongrang.com/
 
     # 기존 컨테이너 중지 및 제거
     sudo docker stop $IMAGE_NAME || true

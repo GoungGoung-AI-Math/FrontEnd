@@ -12,7 +12,7 @@ export interface UserProfile {
 }
 
 export const getUserProfile = async (userId: number): Promise<UserProfile> => {
-  const response = await fetch(`http://localhost:8087/user-profile/get-profile/${userId}`);
+  const response = await fetch(`https://www.udongrang.com:6060/user-profile/get-profile/${userId}`);
   if (!response.ok) {
     throw new Error('Failed to fetch user profile');
   }

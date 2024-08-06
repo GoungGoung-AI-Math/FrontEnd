@@ -19,7 +19,7 @@ export default function LoginButton() {
   useEffect(() => {
     const keycloakInstance = new Keycloak({
       url: 'https://test.udongrang.com:8443',
-      realm: 'next_oauth_test',
+      realm: 'master',
       clientId: 'google',
     });
 
@@ -95,7 +95,7 @@ export default function LoginButton() {
     const token = Cookies.get('access_token');
     console.log(token);
     if (token) {
-      fetch('http://localhost:8080/user/register', {
+      fetch('https://www.udongrang.com:6060/user/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

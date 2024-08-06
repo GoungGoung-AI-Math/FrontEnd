@@ -36,7 +36,7 @@ export default function ExamPage(): JSX.Element {
     setFilters(newFilters)
     setSearched(true)
     try {
-      const response = await fetch(`https://test.udongrang.com:7070/exam/search?page=${page}`, {
+      const response = await fetch(`https://www.udongrang.com:7070/exam/search?page=${page}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

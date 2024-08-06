@@ -1,5 +1,5 @@
 # 베이스 이미지로 Node.js 최신 LTS 버전 사용
-FROM node:22
+FROM node:lts
 
 # 작업 디렉토리 설정
 WORKDIR /usr/src/app

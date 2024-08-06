@@ -11,8 +11,8 @@ const handle = app.getRequestHandler();
 let httpsOptions;
 try {
     httpsOptions = {
-        key: readFileSync(resolve('/etc/letsencrypt/live/test.udongrang.com/privkey.pem')),
-        cert: readFileSync(resolve('/etc/letsencrypt/live/test.udongrang.com/fullchain.pem'))
+        key: readFileSync(resolve('/etc/letsencrypt/live/www.udongrang.com/privkey.pem')),
+        cert: readFileSync(resolve('/etc/letsencrypt/live/www.udongrang.com/fullchain.pem'))
     };
 } catch (err) {
     console.error('Error reading SSL certificate files:', err);
